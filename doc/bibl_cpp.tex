@@ -1,0 +1,18 @@
+\chapter{Biblioteca em C++}\label{cap:bibl_cpp}
+
+Para a aplicação de abstração de \textit{hardware}, é necessária uma linguagem de programação que acompanhe suas condições de funcionamento, como poder relacionar diferentes objetos e fazer com que dependam de outros, podendo relacionar a funcionalidade e a implementação dos componentes do \textit{firmware}. Uma linguagem apropriada é C++, por ser orientada a objetos, podem-se criar classes para cada objeto desejado. C++ conta também com polimorfismo e herança de classes que são úteis para a abstração desejada. Por ser uma linguagem de alto desempenho e bem consagrada, há amplo suporte disponível para aprimoramento do código e resolução de possíveis problemas.
+Assim, após a confecção da biblioteca SPI em C, foi feito um estudo da linguagem C++, usando diversas fontes, dentre elas:
+\begin{itemize}
+\item Paul Deitel, H. M. Deitel. How to program. Prentice Hall, 2005.
+\item http://www.cplusplus.com/reference/
+\item http://www.learncpp.com/
+\end{itemize}
+
+O antigo \textit{firmware} da RoboIME, em linguagem C e partes do \textit{firmware} (em C++) do rádio TPP-1400 da IMBEL, também foram valiosos para aprendizado da linguagem C++ e serviram de inspiração.
+
+Em seguida, a biblioteca do SPI foi reescrita, incorporando códigos anteriores a uma hierarquia de classes composta pelas classes:
+Quanto ao módulo de transmissão, ele corresponde a uma classe NRF24L01P que herda de uma classe abstrata MODEM (uma classe de interface), e possui em seu interior objetos da classe abstrata IO_PIN representando seus pinos, bem como um SPI_STM32 que representa a interface SPI com o módulo de controle, que por sua vez herda da classe abstrata SPI (outra classe de interface).
+
+% Ramificação constante ou taxa constante
+
+% vim: tw=80 et ts=2 sw=2 sts=2 ft=tex spelllang=pt_br,en

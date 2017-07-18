@@ -1,0 +1,92 @@
+\chapter{Resultados}\label{cap:resultados}
+% OBS: "Falta de diagramas"
+
+\input{doc/gui}
+
+\section{Influência dos Parâmetros no Comportamento do Time}
+
+Nesta secção são apresentados os diferentes comportamentos que podem ser obtidos
+através da modificação dos parâmetros apresentados no
+Capítulo~\ref{cap:modelagem}.  Cada parâmetro é modificado e os resultados na
+mudança do planejamento são evidenciados.
+
+Os valores iniciais dos parâmetros modificados nos experimentos realizados são:
+
+% TODO: Substituir nomes das variáveis, conforme a modelagem
+\begin{enumerate}
+  \item Distância de movimentação da bola: 15cm
+  \item Abertura mínima para chute a gol: 18.0 graus
+%  \item $p_{dist{\ }max{\ }mover} = 0$
+%  \item $p_{dist{\ }total{\ }mover} = 0$
+%  \item $p_{ataque} = 1000$
+  \item $p_{abertura{\ }gol_{ad}} = 10$
+  \item $p_{abertura{\ }gol_{c}} = 180$
+\end{enumerate}
+
+As Figuras~\ref{fig:default_atq}~e~\ref{fig:default_def} apresentam o
+planejamento em um ambiente de ataque e defesa, respectivamente, com os
+parâmetros iniciais apresentados anteriormente.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width= 0.8\linewidth]{result/default_atq}
+  \caption{Planejamento com os parâmetros iniciais no
+           ataque}\label{fig:default_atq}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width= 0.8\linewidth]{result/default_def}
+  \caption{Planejamento com os parâmetros iniciais
+           na defesa}\label{fig:default_def}
+\end{figure}
+
+\input{doc/results/kick_pos_var}
+%\input{doc/results/dist_total_mv}
+%\input{doc/results/dist_max_mv}
+%\input{doc/results/atack_cost}
+\input{doc/results/see_enemy_goal}
+\input{doc/results/block_goal}
+\input{doc/results/min_gap_kick}
+
+\section{Goleiro}
+
+Conforme pode ser visto nos experimentos anteriores, somente em um experimento o
+goleiro não surgiu.  A penalização foi desconsiderada para um único robô de
+$T_c$.  Isso é interessante, pois não foi necessário restringir o movimento
+deste robô, permitindo que este se mova conforme a valoração de $f_U$.
+
+% TODO: More games to include this section. Only two games are not enough.
+%\section{Desempenho em Jogo}
+%Foram realizados dois jogos supervisionados de dez minutos cada.
+%O time $T_1$ jogou com os parâmetros iniciais apresentados no
+%início deste capítulo. Já no time $T_2$ foi modificado
+%somente o peso $p_{ataque}$ de 1000 para 3530. Os resultados são apresentados
+%na Tabela~\ref{tab:games}.
+%
+%\begin{table}[H]
+%  \begin{center}
+%  \begin{tabular}{|c|c|}
+%    \hline
+%    Times      & Resultado \\
+%    \hline
+%    $T_1$ vs $T_1$ &  0 vs 0   \\
+%    \hline
+%    $T_1$ vs $T_2$ &  0 vs 1   \\
+%    \hline
+%  \end{tabular}
+%  \caption{Resultado dos jogos $T_1$ contra $T_1$ e $T_1$ contra $T_2$}\label{tab:games}
+%  \end{center}
+%\end{table}
+%
+%Conforme observado, houve um equilibrio durante a
+%
+%% OBS:                  |  It seams like he lost
+%%                       |  his mind here...
+%%                      \ / more than 10 scretches
+%%                       V  only in the subscription number...
+%
+%partida entre $T_1$ e $T_1$. Com uma pequena
+%modificação, pode-se ter um desequilíbrio na
+%partida.
+
+% vim: tw=80 et ts=2 sw=2 sts=2 ft=tex spelllang=pt_br,en

@@ -1,0 +1,33 @@
+\chapter{Desenho e Prototipagem das Placas Mãe, Placas de Chute e Placas Acionadoras dos Motores dos Robôs}\label{cap:design_placas}
+
+O projeto das placas foi feito em duas etapas. A primeira etapa foi o desenvolvimento do esquemático do circuito, representação simbólica dos componentes e suas ligações. Nessa fase foram selecionados os componentes. A segunda etapa foi o \textit{layout}, em que foi feito um CAD (\textit{Computer Aided Design} ­– desenho assistido por computador) com o posicionamento dos componentes e o desenho das trilhas de cobre, tomando por base o esquemático. Foi preciso levar em conta a corrente que circularia pelo circuito para definir a larguras das trilhas, os tamanhos dos componentes a serem soldados e o tamanho da placa que seria produzida. Ao projetar as placas, os alunos da iniciativa adquirem experiência tanto em desenho de PCBs (\textit{Printed Circuit Board} – placa de circuito impresso), como em soldagem de componentes SMD (\textit{Surface Mounted Device} – dispositivo montado em superfície).
+
+Para o desenvolvimento das placas, foi utilizado o \textit{software} \textit{Altium Designer\textsuperscript{\textregistered}}. As Figuras ~\ref{fig:blocos_placa_mae} apresentam os diagramas de blocos feitos a partir de esboços dos desenhos das três placas, utilizando uma das funcionalidades do \textit{Altium}.
+
+Na placa mãe, o módulo de transmissão envia os dados recebidos da inteligência para o microcontrolador (que fica no módulo de controle adquirido) via protocolo SPI.
+O módulo de controle envia sinais PWM para os módulos de motores e um pulso e um sinal digital para o módulo do chute. As correntes nos módulos de motores são medidas por circuitos integrados dedicados e enviadas para o módulo de controle via protocolo I2C.
+
+Para funcionamento dos motores, são usados drivers e uma ponte H, para que os motores possam trabalhar nos dois sentidos.
+Feito dessa forma, o \textit{hardware} passa a ter o fluxograma apresentado na Figura\ref{fig:func_hw}. Os comandos chegam através do módulo de comunicação e pela placa mãe é transmitida até a o módulo de controle (\textit{Discovery} STM32F4), que então a envia aos módulos pertinentes, motores ou chute. Há quatro motores ligados às rodas e um ao drible. O chute está separado em forte (baixo) e fraco (alto). Para fazer o controle das velocidades de giro de cada roda, informações sobre as rotações das rodas são passadas para a \textit{Discovery}, que pode também passá-las para o módulo de transmissão, se for o caso.
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.5]{funcionamento_hw}
+	\caption{Funcionamento do \textit{hardware}}
+	\label{fig:func_hw}
+\end{figure}
+
+%\begin{figure}
+%	\centering
+%	\includegraphics[scale=1]{blocos_placa_mae}
+%	\caption{Diagrama de blocos da Placa Mãe}
+%	\label{fig:blocos_placa_mae}
+%\end{figure}
+
+\input{doc/placa_mae}
+\input{doc/modulo_motor}
+\input{doc/modulo_chute}
+
+% Ramificação constante ou taxa constante
+
+% vim: tw=80 et ts=2 sw=2 sts=2 ft=tex spelllang=pt_br,en

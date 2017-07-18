@@ -1,0 +1,34 @@
+# Requirements
+language: cpp
+compiler:
+  #- gcc # broken, ICE
+  - clang
+
+# Dependencies
+before_install:
+  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+  - sudo add-apt-repository -y ppa:kalakris/cmake
+  - sudo add-apt-repository -y "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.6 main"
+  - wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key | sudo apt-key add -
+  - sudo apt-get update -qq
+install:
+  # Modern compilers please
+  - sudo apt-get install -qq g++-4.9 clang-3.6
+  - if [ $CC = clang ]; then export CC=clang-3.6 CXX=clang++-3.6; fi
+  # CMake
+  - sudo apt-get install -qq cmake
+  # Google Protobuf
+  - sudo apt-get install -qq protobuf-compiler libprotobuf-dev
+  # ZMQ
+  - sudo apt-get install -qq libzmq3-dev
+  # GLUT
+  - sudo apt-get install -qq freeglut3-dev
+  # Fix to bug: Xf86VidMode library and headers were not found
+  - sudo apt-get install -qq xorg-dev libglu1-mesa-dev
+
+# Install
+script: "mkdir build && cd build && cmake .. && make"
+notifications:
+  email:
+    recipients:
+      - renanps123@gmail.com
