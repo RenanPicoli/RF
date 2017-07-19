@@ -27,7 +27,7 @@ install:
   - sudo apt-get install -qq xorg-dev libglu1-mesa-dev
 
 # Install
-script: "mkdir build && cd build && cmake .. && make"
+script: "mkdir build && cd build && cmake .. && make pdf"
 notifications:
   email:
     recipients:

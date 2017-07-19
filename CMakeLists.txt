@@ -99,6 +99,8 @@ set(DOC
   doc/modulo_motor.tex
   doc/modulo_chute.tex
   doc/larc_2016.tex
+  doc/const_pid.tex
+  doc/kalman.tex
 )
 
 set(IMG
