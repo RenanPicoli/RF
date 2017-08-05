@@ -2,26 +2,36 @@
 
 Falar sobre o filtro de Kalman que foi implementado.
 
-The Kalman filter is a recursive estimator. This means that only the estimated state from the previous time step and the current measurement are needed to compute the estimate for the current state. In contrast to batch estimation techniques, no history of observations and/or estimates is required. In what follows, the notation x ^ n ∣ m {\displaystyle {\hat {\mathbf {x} }}_{n\mid m}} {\hat {\mathbf {x} }}_{n\mid m} represents the estimate of x {\displaystyle \mathbf {x} } \mathbf {x} at time n given observations up to and including at time m ≤ n.
+Os dados de visão são recebidos com ruido, que tem diversos causadores e é impossível de ser completamente eliminado. Tal ruido causa oscilação nas velocidades e derivadas superiores que são calculadas a partir das medidas de posição. Precisávamos de uma medida de velocidade mais confiável, então foi decidido que o ruido na posição seria tratado para diminuir seus efeitos no cálculo das velocidades do robô. Além disso, quando são usadas mais de uma câmera para filmar o jogo, cada câmera registra um objeto numa posição ligeiramente distinta, demandando uma fusão sensorial.
 
-The state of the filter is represented by two variables:
+O filtro de Kalman permite que a partir de uma medição ruidosa e um modelo para o fenômeno sendo observado, seja obtida uma estimativa mais precisa do que a medição. Além disso, também pode ser utilizado para a fusão de diversas medidas resultando em uma estimativa mais precisa.
 
-    x ^ k ∣ k {\displaystyle {\hat {\mathbf {x} }}_{k\mid k}} {\hat {\mathbf {x} }}_{k\mid k}, the a posteriori state estimate at time k given observations up to and including at time k;
-    P k ∣ k {\displaystyle \mathbf {P} _{k\mid k}} \mathbf {P} _{k\mid k}, the a posteriori error covariance matrix (a measure of the estimated accuracy of the state estimate).
+O filtro de Kalman é um estimador recursivo. Apenas o estado estimado do passo de tempo anterior e a medida atual são necessários para computar a estimativa para o estado atual. No que se segue, a notação $\displaystyle {\hat {\mathbf {x} }}_{n\mid m}$ representa a estimativa de ${\displaystyle \mathbf {x} }$ no tempo n dadas observação até o tempo $m \leq n$, inclusive.
 
-The Kalman filter can be written as a single equation, however it is most often conceptualized as two distinct phases: "Predict" and "Update". The predict phase uses the state estimate from the previous timestep to produce an estimate of the state at the current timestep. This predicted state estimate is also known as the a priori state estimate because, although it is an estimate of the state at the current timestep, it does not include observation information from the current timestep. In the update phase, the current a priori prediction is combined with current observation information to refine the state estimate. This improved estimate is termed the a posteriori state estimate.
+O estado do filtro é representado por duas variáveis:
 
-Typically, the two phases alternate, with the prediction advancing the state until the next scheduled observation, and the update incorporating the observation. However, this is not necessary; if an observation is unavailable for some reason, the update may be skipped and multiple prediction steps performed. Likewise, if multiple independent observations are available at the same time, multiple update steps may be performed (typically with different observation matrices Hk).[18][19]
-Predict
-Predicted (a priori) state estimate 	x ^ k ∣ k − 1 = F k x ^ k − 1 ∣ k − 1 + B k u k {\displaystyle {\hat {\mathbf {x} }}_{k\mid k-1}=\mathbf {F} _{k}{\hat {\mathbf {x} }}_{k-1\mid k-1}+\mathbf {B} _{k}\mathbf {u} _{k}} {\displaystyle {\hat {\mathbf {x} }}_{k\mid k-1}=\mathbf {F} _{k}{\hat {\mathbf {x} }}_{k-1\mid k-1}+\mathbf {B} _{k}\mathbf {u} _{k}}
-Predicted (a priori) estimate covariance 	P k ∣ k − 1 = F k P k − 1 ∣ k − 1 F k T + Q k {\displaystyle \mathbf {P} _{k\mid k-1}=\mathbf {F} _{k}\mathbf {P} _{k-1\mid k-1}\mathbf {F} _{k}^{\mathrm {T} }+\mathbf {Q} _{k}} {\displaystyle \mathbf {P} _{k\mid k-1}=\mathbf {F} _{k}\mathbf {P} _{k-1\mid k-1}\mathbf {F} _{k}^{\mathrm {T} }+\mathbf {Q} _{k}}
-Update
-Innovation or measurement pre-fit residual 	y ~ k = z k − H k x ^ k ∣ k − 1 {\displaystyle {\tilde {\mathbf {y} }}_{k}=\mathbf {z} _{k}-\mathbf {H} _{k}{\hat {\mathbf {x} }}_{k\mid k-1}} {\tilde {\mathbf {y} }}_{k}=\mathbf {z} _{k}-\mathbf {H} _{k}{\hat {\mathbf {x} }}_{k\mid k-1}
-Innovation (or pre-fit residual) covariance 	S k = R k + H k P k ∣ k − 1 H k T {\displaystyle \mathbf {S} _{k}=\mathbf {R} _{k}+\mathbf {H} _{k}\mathbf {P} _{k\mid k-1}\mathbf {H} _{k}^{\mathrm {T} }} {\displaystyle \mathbf {S} _{k}=\mathbf {R} _{k}+\mathbf {H} _{k}\mathbf {P} _{k\mid k-1}\mathbf {H} _{k}^{\mathrm {T} }}
-Optimal Kalman gain 	K k = P k ∣ k − 1 H k T S k − 1 {\displaystyle \mathbf {K} _{k}=\mathbf {P} _{k\mid k-1}\mathbf {H} _{k}^{\mathrm {T} }\mathbf {S} _{k}^{-1}} {\displaystyle \mathbf {K} _{k}=\mathbf {P} _{k\mid k-1}\mathbf {H} _{k}^{\mathrm {T} }\mathbf {S} _{k}^{-1}}
-Updated (a posteriori) state estimate 	x ^ k ∣ k = x ^ k ∣ k − 1 + K k y ~ k {\displaystyle {\hat {\mathbf {x} }}_{k\mid k}={\hat {\mathbf {x} }}_{k\mid k-1}+\mathbf {K} _{k}{\tilde {\mathbf {y} }}_{k}} {\hat {\mathbf {x} }}_{k\mid k}={\hat {\mathbf {x} }}_{k\mid k-1}+\mathbf {K} _{k}{\tilde {\mathbf {y} }}_{k}
-Updated (a posteriori) estimate covariance 	P k | k = ( I − K k H k ) P k | k − 1 {\displaystyle \mathbf {P} _{k|k}=(\mathbf {I} -\mathbf {K} _{k}\mathbf {H} _{k})\mathbf {P} _{k|k-1}} {\displaystyle \mathbf {P} _{k|k}=(\mathbf {I} -\mathbf {K} _{k}\mathbf {H} _{k})\mathbf {P} _{k|k-1}}
-Measurement post-fit residual 	y ~ k ∣ k = z k − H k x ^ k ∣ k {\displaystyle {\tilde {\mathbf {y} }}_{k\mid k}=\mathbf {z} _{k}-\mathbf {H} _{k}{\hat {\mathbf {x} }}_{k\mid k}} {\displaystyle {\tilde {\mathbf {y} }}_{k\mid k}=\mathbf {z} _{k}-\mathbf {H} _{k}{\hat {\mathbf {x} }}_{k\mid k}}
+   ${\displaystyle {\hat {\mathbf {x} }}_{k\mid k}}$, a estimativa de estado a posteriori no tempo k dadas observações até o tempo k, inclusive;
+   ${\displaystyle \mathbf {P} _{k\mid k}}$, a matriz de covariância do erro a posteriori (uma medida da acurácia estimada da estimativa do estado).
+
+O filtro pode ser descrito em uma única equação, no entanto costuma ser conceitualizado em duas fases distintas: "Predição" e "Atualização". A fase de predição usa a estimativa de estado do passo anterior para produzir uma estimativa do estado no passo atual. Essa estimativa de estado predita também é conhecida como estimativa de estado a priori pois, embora seja uma estimativa do estado no passo atual, ela não inclui a informação da observação feita no passo atual. Na fase de atualização, a predição a priori atual é combinada a information da observação atual para refinar a estimativa de estado. Essa estimativa melhorada é chamada a estimativa de estado a posteriori.
+
+Tipicamente, as duas fases se alternam, com a predição avançando o estado até a próxima observação agendada, e a atualização incorporando a observação. No entanto, isso não é necessario; se uma observação não está disponível por alguma razão, a atualização pode ser pulada e serem executados múltiplos passos de predição. Semelhantemente, se múltiplas observações independentes estão disponíveis ao mesmo tempo, múltiplos passos de atualização podem ser realizados (tipicamente com diferentes matrizes de observação $H_k$).
+
+\section{Predição}
+\begin{itemize}
+  \item Estimativa de estado predita (a priori): ${\displaystyle {\hat {\mathbf {x} }}_{k\mid k-1}=\mathbf {F} _{k}{\hat {\mathbf {x} }}_{k-1\mid k-1}+\mathbf {B} _{k}\mathbf {u} _{k}}$
+  \item Covariância estimada predita (a priori): ${\displaystyle \mathbf {P} _{k\mid k-1}=\mathbf {F} _{k}\mathbf {P} _{k-1\mid k-1}\mathbf {F} _{k}^{\mathrm {T} }+\mathbf {Q} _{k}}$
+\end{itemize}
+
+\section{Atualização}
+\begin{itemize}
+  \item Inovação ou resíduo pré-ajuste da medida: ${\displaystyle {\tilde {\mathbf {y} }}_{k}=\mathbf {z} _{k}-\mathbf {H} _{k}{\hat {\mathbf {x} }}_{k\mid k-1}}$
+  \item Innovation (or pre-fit residual) covariance: ${\displaystyle \mathbf {S} _{k}=\mathbf {R} _{k}+\mathbf {H} _{k}\mathbf {P} _{k\mid k-1}\mathbf {H} _{k}^{\mathrm {T} }}$
+  \item Ganho ótimo de Kalman: ${\displaystyle \mathbf {K} _{k}=\mathbf {P} _{k\mid k-1}\mathbf {H} _{k}^{\mathrm {T} }\mathbf {S} _{k}^{-1}}$
+  \item Estimativa de estado atualizada (a posteriori): ${\displaystyle {\hat {\mathbf {x} }}_{k\mid k}={\hat {\mathbf {x} }}_{k\mid k-1}+\mathbf {K} _{k}{\tilde {\mathbf {y} }}_{k}}$
+  \item Covariância estimada atualizada (a posteriori): ${\displaystyle \mathbf {P} _{k|k}=(\mathbf {I} -\mathbf {K} _{k}\mathbf {H} _{k})\mathbf {P} _{k|k-1}}$
+  \item Resíduo da medida pós-ajuste: ${\displaystyle {\tilde {\mathbf {y} }}_{k\mid k}=\mathbf {z} _{k}-\mathbf {H} _{k}{\hat {\mathbf {x} }}_{k\mid k}}$
+\end{itemize}
 
 % Ramificação constante ou taxa constante
 
