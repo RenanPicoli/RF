@@ -101,6 +101,7 @@ set(DOC
   doc/larc_2016.tex
   doc/const_pid.tex
   doc/kalman.tex
+  doc/robocup_2017.tex
 )
 
 set(IMG
@@ -168,6 +169,14 @@ set(IMG
   img/blocos_placa_mae.jpeg
   img/blocos_motor.jpeg
   img/blocos_chute.jpeg
+  img/SSL_Vision_Log_Player.png
+  img/Detection_Frame_Estimator.png
+  img/Kalman_Estimator_for_Balls.png
+  img/Kalman_Estimator_for_Robots.png
+  img/Kalman_Filter_for_Balls_inside.png
+  img/Kalman_Filter_for_Robots_inside.png
+  img/Kalman_Frame_Estimator.png
+	img/robocup2017.jpg
 )
 
 set(PROTO
