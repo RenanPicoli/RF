@@ -32,4 +32,4 @@ script: "mkdir build && cd build && cmake .. && make pdf"
 notifications:
   email:
     recipients:
-      - renanps123@gmail.com
+- renanps123@gmail.com
